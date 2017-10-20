@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Voice Recorder</string>
+
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_voice_main">VoiceMain</string>
+    <string name="section_format">Recording Started: %1$d</string>
+
+    <string name="new_message_notification_title_template">Recording Started</string>
+
+    <!-- TODO: remove this placeholder text -->
+    <string name="new_message_notification_placeholder_text_template">%1$s
+    </string>
+
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
+</resources>
