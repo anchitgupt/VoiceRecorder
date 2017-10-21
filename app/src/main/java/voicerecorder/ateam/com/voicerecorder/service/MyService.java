@@ -2,8 +2,10 @@ package voicerecorder.ateam.com.voicerecorder.service;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
@@ -20,6 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import voicerecorder.ateam.com.voicerecorder.Database.SqlLite;
+import voicerecorder.ateam.com.voicerecorder.Database.VoiceContract;
 import voicerecorder.ateam.com.voicerecorder.Notification.NewMessageNotification;
 
 public class MyService extends Service {
@@ -28,6 +32,10 @@ public class MyService extends Service {
     final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
     boolean b;
     NewMessageNotification notification;
+    File file;
+    String filename;
+    long timeStrated, timeEnded;
+    SqlLite sqlLite;
 
     public MyService() {
     }
@@ -47,8 +55,8 @@ public class MyService extends Service {
 
     }
     public void startRecording() {
-
-        Toast.makeText(this,"Service created!!", Toast.LENGTH_SHORT).show();
+        timeStrated = System.nanoTime();
+        Toast.makeText(this,"Service created!! "+timeStrated, Toast.LENGTH_SHORT).show();
         // Media Recorder
         //String path = createFileAndPath();
 
@@ -73,15 +81,20 @@ public class MyService extends Service {
         File folder = new File(PATH + "/Voice Recordings");
         if(!folder.exists())
             folder.mkdir();
-        String filename = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss",Locale.getDefault()).format(new Date());
-        File file = new File(folder, "VR_"+filename+".mp4");
+        filename = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss",Locale.getDefault()).format(new Date());
+        file = new File(folder, "VR_"+filename+".mp4");
         return file;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e("Ended", String.valueOf(SystemClock.currentThreadTimeMillis()));
+        timeEnded = System.nanoTime();
+        Log.e("Ended", String.valueOf(timeEnded));
+        long elaspedTime = (timeEnded - timeStrated)/1000000000;
+        Log.e("Finished in: ", String.valueOf(elaspedTime));
+        sqlLite = new SqlLite(this);
+        sqlLite.insertData(file.getName(),elaspedTime,PATH + "/Voice Recordings",new Date());
         notification = new NewMessageNotification();
         notification.notify(this,createFileAndPath().getName(),123,createFileAndPath().getName());
         if(mMediaRecorder!=null) {
@@ -90,4 +103,10 @@ public class MyService extends Service {
         }
         Toast.makeText(this, "Destroyed!!", Toast.LENGTH_SHORT).show();
     }
+
+    /*public Uri getFile() {
+        ContentValues cv = new ContentValues();
+        cv.put(VoiceContract.VoiceEntry.NAME, VoiceContract.VoiceEntry.LENGTH);
+        return Uri.fromFile(file);
+    }*/
 }
