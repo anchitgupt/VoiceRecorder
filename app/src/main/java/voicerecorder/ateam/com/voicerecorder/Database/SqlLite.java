@@ -2,14 +2,19 @@ package voicerecorder.ateam.com.voicerecorder.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.wifi.aware.PublishConfig;
 import android.widget.Toast;
 
+import voicerecorder.ateam.com.voicerecorder.Data;
 import voicerecorder.ateam.com.voicerecorder.Database.VoiceContract.VoiceEntry;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by apple on 20/10/17.
@@ -71,6 +76,18 @@ public class SqlLite extends SQLiteOpenHelper{
         return true;
     }
 
+    public Cursor getDataById(long id)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("select * from "+VoiceEntry.TABLE_NAME+" where id="+id,null);
+    }
+
+    public Cursor getAllData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from "+VoiceEntry.TABLE_NAME,null);
+        return cursor;
+
+    }
 
 
 }

@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.annotation.IntDef;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Chronometer;
 import android.widget.Toast;
@@ -22,9 +23,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import voicerecorder.ateam.com.voicerecorder.Adapter.MyAdapter;
 import voicerecorder.ateam.com.voicerecorder.Database.SqlLite;
 import voicerecorder.ateam.com.voicerecorder.Database.VoiceContract;
 import voicerecorder.ateam.com.voicerecorder.Notification.NewMessageNotification;
+import voicerecorder.ateam.com.voicerecorder.Record.FileDisplay;
 
 public class MyService extends Service {
 
@@ -36,7 +39,7 @@ public class MyService extends Service {
     String filename;
     long timeStrated, timeEnded;
     SqlLite sqlLite;
-
+    FileDisplay fileDisplay;
     public MyService() {
     }
 
@@ -50,6 +53,8 @@ public class MyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Service Strated", Toast.LENGTH_SHORT).show();
         startRecording();
+        fileDisplay = new FileDisplay();
+
         Log.e("Strated", String.valueOf(SystemClock.currentThreadTimeMillis()));
         return START_STICKY;
 
@@ -89,14 +94,17 @@ public class MyService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        String filePath = createFileAndPath().getName();
         timeEnded = System.nanoTime();
         Log.e("Ended", String.valueOf(timeEnded));
         long elaspedTime = (timeEnded - timeStrated)/1000000000;
         Log.e("Finished in: ", String.valueOf(elaspedTime));
         sqlLite = new SqlLite(this);
-        sqlLite.insertData(file.getName(),elaspedTime,PATH + "/Voice Recordings",new Date());
+        Date date = new Date();
+        sqlLite.insertData(filePath,elaspedTime,PATH + "/Voice Recordings",date);
         notification = new NewMessageNotification();
-        notification.notify(this,createFileAndPath().getName(),123,createFileAndPath().getName());
+        NewMessageNotification.notify(this,filePath,123,filePath);
+
         if(mMediaRecorder!=null) {
             mMediaRecorder.stop();
             mMediaRecorder.release();
