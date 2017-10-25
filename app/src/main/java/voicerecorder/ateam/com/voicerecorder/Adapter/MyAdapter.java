@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -33,6 +36,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     AlertDialog.Builder alert;
     SeekBar seekbar;
     MediaPlayer player;
+    private final static int FADE_DURATION = 1000; // in milliseconds
+
 
     public MyAdapter(Context context, List<Data> list) {
         this.context = context;
@@ -113,6 +118,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 alert.show();
             }
         });
+
+        setFadeAnimation(holder.itemView);
+    }
+
+    private void setFadeAnimation(View itemView) {
+        /*AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(FADE_DURATION);
+        itemView.startAnimation(anim);
+*/
+        ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+    anim.setDuration(FADE_DURATION);
+    itemView.startAnimation(anim);
     }
 
     @Override

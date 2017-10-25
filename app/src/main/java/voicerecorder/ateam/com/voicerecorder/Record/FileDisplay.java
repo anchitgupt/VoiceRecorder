@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -105,7 +106,7 @@ public class FileDisplay extends Fragment implements AdapterView.OnItemClickList
         recycler.setLayoutManager(lllm);
 
         adapter = new MyAdapter(getContext(), list3);
-
+        /*recycler.setAnimation();*/
         recycler.setAdapter(adapter);
 
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -253,6 +254,7 @@ public class FileDisplay extends Fragment implements AdapterView.OnItemClickList
                     player.stop();
                     player = null;
                 }
+
             }
         });
 
