@@ -123,7 +123,8 @@ public class NewMessageNotification {
                                 0,
                                 Intent.createChooser(new Intent(Intent.ACTION_SEND)
                                         .setType("text/plain")
-                                        .putExtra(Intent.EXTRA_TEXT, "I am Recording new recording:"+ticker), "Voice Recorder"),
+                                        .putExtra(Intent.EXTRA_TEXT, "I am Recording new recording:"+ticker), "Voice Recorder")
+                                ,
                                 PendingIntent.FLAG_UPDATE_CURRENT))
                 // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(true);

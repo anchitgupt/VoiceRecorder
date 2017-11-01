@@ -127,10 +127,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         anim.setDuration(FADE_DURATION);
         itemView.startAnimation(anim);
 */
-        ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f,
+        /*ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
     anim.setDuration(FADE_DURATION);
-    itemView.startAnimation(anim);
+    itemView.startAnimation(anim);*/
     }
 
     @Override

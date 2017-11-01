@@ -45,27 +45,30 @@ public class RecordVoice extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_fragment_record, container, false);
-        final TextView textView = (TextView) v.findViewById(R.id.recording_text);
-        final Chronometer mChronometer = (Chronometer) v.findViewById(R.id.chronometer);
+        final TextView textView = v.findViewById(R.id.recording_text);
+        final Chronometer mChronometer = v.findViewById(R.id.chronometer);
         mChronometer.setBase(SystemClock.elapsedRealtime());
+
         mChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 if (s == 0) {
                     textView.setText("Recording.");
-                    s = 1;
+
                 }
                 if (s == 1) {
                     textView.setText("Recording..");
-                    s = 2;
+
                 }
                 if (s == 2) {
                     textView.setText("Recording...");
-                    s = 0;
+                    s=-1;
                 }
+                s++;
             }
         });
-        FloatingActionButton mRecordButton = (FloatingActionButton) v.findViewById(R.id.floatingActionButton);
+
+        FloatingActionButton mRecordButton = v.findViewById(R.id.floatingActionButton);
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
